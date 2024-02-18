@@ -2,6 +2,7 @@ import sqlite3
 import os
 import json
 from shutil import copyfile
+import time
 
 def extract_cookies(domain=None, start_date=None, end_date=None, cookie_name=None, output_file='cookies.json'):
     # Find the directory where Chrome cookies are stored
@@ -56,6 +57,14 @@ def delete_cookie(cookie_name):
     conn = sqlite3.connect(temp_db_path)
     cursor = conn.cursor()
     cursor.execute(f"DELETE FROM cookies WHERE name = '{cookie_name}'")
+    conn.commit()
+    conn.close()
+
+def remove_expired_cookies():
+    current_time = int(time.time() * 1000000)  # Convert current time to microseconds
+    conn = sqlite3.connect(temp_db_path)
+    cursor = conn.cursor()
+    cursor.execute(f"DELETE FROM cookies WHERE expires_utc != 0 AND expires_utc <= {current_time}")
     conn.commit()
     conn.close()
 
