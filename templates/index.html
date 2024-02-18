@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cookie Extraction Tool</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Cookie Extraction Tool</h1>
+        <form id="cookieForm">
+            <div class="form-group">
+                <label for="domain">Domain:</label>
+                <input type="text" class="form-control" id="domain" name="domain">
+            </div>
+            <div class="form-group">
+                <label for="start_date">Start Date:</label>
+                <input type="text" class="form-control" id="start_date" name="start_date">
+            </div>
+            <div class="form-group">
+                <label for="end_date">End Date:</label>
+                <input type="text" class="form-control" id="end_date" name="end_date">
+            </div>
+            <div class="form-group">
+                <label for="cookie_name">Cookie Name:</label>
+                <input type="text" class="form-control" id="cookie_name" name="cookie_name">
+            </div>
+            <button type="submit" class="btn btn-primary">Extract Cookies</button>
+        </form>
+        <div id="message"></div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#cookieForm').submit(function(event) {
+                event.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: '/extract_cookies',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        $('#message').text(response.message);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
